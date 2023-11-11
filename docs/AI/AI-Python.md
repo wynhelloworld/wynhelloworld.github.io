@@ -1,3 +1,5 @@
+[TOC]
+
 # 人工智能Python部分学习
 
 ## 导言
@@ -13,7 +15,7 @@
 python3 -m pip install --user matplotlib
 ```
 
-- `python3 -m ` 用于指定在 python3.8 环境下安装
+- `python3 -m ` 用于指定在 python3 环境下安装
 - `--user` 用于将包安装到用户主目录下
 
 #### 绘制简单的折线图
@@ -204,3 +206,22 @@ plt.savefig('name.png', bbox_inches='tight')
 ```
 
 - `show` 函数会将图片显示到 Matplotlib 查看器上, 而 `savefig` 函数会将图片命名成 name.png, 然后保存到相对路径上, `bbox_inches` 参数会切割掉图片周围多余的部分, 若不想切割, 则忽略掉该参数即可
+
+<script src="https://giscus.app/client.js"
+        data-repo="wynhelloworld/blog-comments"
+        data-repo-id="R_kgDOKruZpg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOKruZps4Ca2L0"
+        data-mapping="url"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+本站所有文章转发 **CSDN** 将按侵权追究法律责任，其它情况随意。
+
