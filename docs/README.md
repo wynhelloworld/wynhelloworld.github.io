@@ -17,7 +17,6 @@
 
 ## Redis
 - [Redis常见数据类型及使用](./redis/redis-base.md)
-- [Test](https://github/wynhelloworld/test/)
 
 
 
