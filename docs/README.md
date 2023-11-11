@@ -18,7 +18,8 @@
 ## Redis
 - [Redis常见数据类型及使用](./redis/redis-base.md)
 
-
+## AI
+- [人工智能Python部分的学习](./AI/AI-Python.md)
 
 <script src="https://giscus.app/client.js"
         data-repo="wynhelloworld/blog-comments"
