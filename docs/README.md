@@ -8,10 +8,10 @@
 </p>
 
 ## Redis
-- [Redis常见数据类型及使用](./redis/redis-base.md)
+- [初识 Redis](./redis/redis-base.md)
 
 ## AI
-- [Python编程从入门到实践](https://wynhelloworld.github.io/Python-Crash-Course/)
+- [Python 编程从入门到实践](https://wynhelloworld.github.io/Python-Crash-Course/)
 
 <script src="https://giscus.app/client.js"
         data-repo="wynhelloworld/blog-comments"
