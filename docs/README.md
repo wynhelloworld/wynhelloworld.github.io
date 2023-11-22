@@ -10,6 +10,7 @@
 ## Redis
 - [初识 Redis](./redis/redis-base.md)
 - [Redis 持久化](./redis/redis-persistence.md)
+- [Redis 事务](./redis/redis-transactions.md)
 
 ## AI
 - [Python 编程从入门到实践](https://wynhelloworld.github.io/Python-Crash-Course/)
