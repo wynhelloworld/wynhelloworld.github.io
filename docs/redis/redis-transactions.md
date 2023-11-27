@@ -23,3 +23,23 @@ Redis 事务的相关操作命令如下：
 ## Watch 的原理
 
 Watch 很像乐观锁，被监控的 Key 会拥有一个版本号，当 Key 发生修改时，版本号都会变化（变大）。在事务中修改 Key 时，也会使得版本号发生变化，并且还会记录下该版本号，当执行 Exec 时，会检查 Key 当前版本号与之前记录的版本号是否相同，若相同则执行事务，反之则丢弃事务。
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="wynhelloworld/blog-comments"
+        data-repo-id="R_kgDOKruZpg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOKruZps4Ca2L0"
+        data-mapping="url"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+本站所有文章转发 **CSDN** 将按侵权追究法律责任，其它情况随意。
