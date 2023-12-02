@@ -8,7 +8,7 @@
 
 ## 哨兵机制自动进行主从切换
 
-Redis Sentinel 是一个独立的进程。Sentinel 节点会监控所有的 Master、Slave 和其余 Sentinel，一但发现有节点出故障了，就令该节点下线。若某个 Sentinel 发现 Master 出故障了，仅凭该 Sentinel 无法下定论让 Master 下线（因为该 Sentinel 可能误判），所以该 Sentinel 会与其它的 Sentinel 进行商讨，若达成共识认为 Master 出故障了，那么这些 Sentinel 会从内部挑选一个 Leader，让 Leader 去执行主从切换的工作。
+Redis Sentinel 是一个独立的进程。Sentinel 节点会监控所有的 Master、Slave 和其余 Sentinel，当发现 Master 出故障时，就自动进行主从切换实现故障转移。
 
 #### 使用 Docker 搭建 3 Sentinel 1Master 2 Slave 架构
 
@@ -26,7 +26,7 @@ mkdir redis-data
 touch docker-compose.yml
 ```
 
-编辑配置文件
+编辑 docker-compose.yml 配置文件
 
 ```shell
 version: '3.7'
@@ -66,7 +66,7 @@ mkdir redis-sentinel
 touch docker-compose.yml
 ```
 
-编辑配置文件
+编辑 docker-compose.yml 配置文件
 
 ```shell
 version: '3.7'
@@ -137,15 +137,24 @@ docker-compose up -d
 
 先执行 `docker stop redis-master` 停掉 Master，营造 Master 因故障宕机的场景，从而进行主从切换。
 
-![image-20231201214005778](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231201214005778.png)
+![image-20231202185658963](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231202185658963.png)
 
-（1）Master 宕机后，Master 与这 3 个 Sentinel 之间的心跳包就没有了，于是这 3 个 Sentinel 就认为 Master 宕机了，所以这 3 个 Sentinel 就判定 Master 为主观下线（sdown）。
+1. 默认情况下，Sentinel 每隔 1s 会向所有 Master、Slave 发送一个 Ping 命令，若有节点没有在 `down-after-milliseconds` 时间内回复 Pong，则 Sentinel 判定该节点为主观下线（sdown)。
+2. Sentinel 判定 Master 为主观下线后，为了验证自己的判断是否正确，会让其它 Sentinel 进行投票，当票数 >= `quorum` 时，所有的 Sentinel 也就会判定 Master 为客观下线（odown）。
+3. Master 被判定为客观下线后，所有监控 Master 的 Sentinel 会进行协商，选举出一个 Leader 进行故障转移操作。由于在相近时间内可能会有多个 Sentinel 判定 Master 为客观下线，所以可能会有多个 Sentinel 同时竞选 Leader，这些 Sentinel 会进行拉票和投票，谁拉到的票数先 >= 哨兵个数 / 2 + 1 谁就是 Leader。
+4. 故障转移的步骤如下：
+   1. 选择新 Master：
+      1. Leader 会先过滤掉网络连接状态不好的 Slave。
+      2. 选择优先级最低的 Slave。若优先级都相同则继续。
+      3. 选择 offset 最大的 Slave。若 offset 都相同则继续。
+      4. 选择 runID 最小的 Slave。
+   2. 配置新 Master：
+      1. Leader 会让新 Master 执行 slave no one 命令，脱离掉原来的 Master，成为一个独立节点。
+      2. Leader 每隔 1s 向新 Master 发送一次 INFO 命令，观察收到的信息。
+      3. 当从收到的信息观察到 role: master 后，执行后面的步骤。
+   3. Sentinel 会让其它的 Slave 执行 slaveof <新 Master IP> <新 Master Port>。
 
-（2）所有判定 Master 为主观下线的 Sentinel 都会投 1 票，当票数 >= 2 时，判定 Master 为客观下线（odown）。票数 >= 2 的配置在 sentinel1.conf、sentinel2.conf、sentinel3.conf 中配置过：`sentinel monitor redis-master 172.18.0.2 6379 2`。
 
-（3）从所有的 Sentinel 中选举出 1 个 Leader，让 Leader 去进行接下来的操作（选新的 Master，配置剩余的 Slave）。选举规则是：Sentinel 一旦判定 Master 为主观下线，就会向其它的 Sentinel 发起拉票请求，收到请求的 Sentinel 会进行投票（只有 1 票，若已经投过，就不能再投了），当票数超过 Sentinel 的总数的一半时，自动成为 Leader，所以一般情况下谁先发起拉票请求，谁成为 Leader。
-
-（4）Leader 会先根据 Slave 的优先级进行选举，谁优先级高谁成为 Master，若优先级都相等则根据 offset，谁的 offset 大，谁就成为 Master，若优先级和 offset 都相等，则根据 runid 选举，其实这里就完全随机了。选举出 Master 后，Leader 会让 Master 执行 `slaveof no one` 脱离原来的 Master，让其它的 Slave 执行 `slaveof 新masterip 新masterport` 成为新 Master 的 Slave。
 
 
 
