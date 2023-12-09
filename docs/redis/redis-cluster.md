@@ -1,3 +1,5 @@
+[TOC]
+
 # Redis 集群
 
 Redis 主从复制提高了系统的可用性，但真正存储数据的还是 Master 和 Slave，当存储的数据量很大的时候，就容易接近 Master 或 Slave 所在机器的物理内存了，这时就很容易出现问题。解决单点内存不足问题的最简单解决办法就是引入更多的机器，Redis 集群就是在上述的思路之下引入了多组 Master / Slave，每一组 Master / Slave 存储数据全集的一部分。
@@ -401,6 +403,38 @@ redis-cli -h 172.30.0.101 -p 6379 -c
 ![image-20231207214910783](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231207214910783.png)
 
 客户端又从 103 变成了 101。
+
+#### 集群中的节点宕机会发生什么？
+
+先随便连接一个 redis 节点，查看一下集群关系。
+
+![image-20231209213430275](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231209213430275.png)
+
+关闭一个 Slave，查看一下集群关系。
+
+![image-20231209213843974](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231209213843974.png)
+
+可以发现当一个 Slave 宕机时，并不会影响集群结构。
+
+恢复刚才的 Slave，然后关闭一个 Master，查看一下集群关系。
+
+![image-20231209214505742](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231209214505742.png)
+
+可以发现，当一个分片的 Master 宕机时，分片内部的一个 Slave 会成为新的 Master，而 其它的 Slave 也会追随新的 Master。
+
+当这个关闭的 Master 恢复时，查看一下集群关系。
+
+![image-20231209214822084](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231209214822084.png)
+
+这个原来的 Master 还属于原来的分片，但它已经成为新的 Master 的 Slave 了。
+
+原来的 Master 现在变成了原来的分片下的一个 Slave，但它还能恢复过来，登录上这个 Master，执行命令`cluster nodes`。
+
+![image-20231209215803635](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231209215803635.png)
+
+#### 主节点宕机后的处理流程
+
+
 
 
 
