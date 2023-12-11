@@ -404,7 +404,7 @@ redis-cli -h 172.30.0.101 -p 6379 -c
 
 客户端又从 103 变成了 101。
 
-#### 集群中的节点宕机会发生什么？
+## 节点宕机
 
 先随便连接一个 redis 节点，查看一下集群关系。
 
@@ -452,7 +452,55 @@ redis-cli -h 172.30.0.101 -p 6379 -c
 
 （4）新 Master 会把自己晋升的消息广播给其它集群。
 
+## 集群扩容
 
+#### 1、往集群中添加新的 Master
+
+```shell
+redis-cli --cluster add-node 172.30.0.110:6379 172.30.0.101:6379
+```
+
+上述命令中的第一组地址是要添加的节点地址，第二组地址是集群中的任意一个节点地址。
+
+随便登录一个客户端，查看集群结构如下：
+
+![image-20231211190717104](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231211190717104.png)
+
+#### 2、重新分配集群中的 slots
+
+```shell
+redis-cli --cluster reshard 172.30.0.101:6379
+```
+
+执行完上述命令后，一共有 4 个地方需要填，填完之后才真正开始分配 slots。
+
+![image-20231211191556013](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231211191556013.png)![image-20231211191651423](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231211191651423.png)
+
+第一个地方是：填写新分片中分配 slots 的数量。
+
+第二个地方是：填写接收 slots 的节点的 ID。
+
+第三个地方是：填写分配 slots 的节点的 ID。若填写 ‘type’，则默认所有的节点的 ID。
+
+第四个地方是：询问是否继续实施上面的计划，肯定要填写 yes 了。
+
+#### 3、往集群中添加新的 Slave
+
+```shell
+redis-cli --cluster add-node 172.30.0.111:6379 172.30.0.101:6379 --cluster-slave
+```
+
+上述命令中的第一组地址是要添加的节点地址，第二组地址是集群中的任意一个节点地址。
+
+随便登陆一个客户端，查看集群结构如下：
+
+![image-20231211192827543](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231211192827543.png)
+
+可以发现，111 成为了 102 的 Slave，108 成为了 110 的 Slave。
+
+> 若不往集群中添加新的 Slave，那么新的分片就只有一个 Master，当这个 Maser 宕机时，会导致整个集群宕机。所以必须要往新的分片中添加 Slave。
+>
+> 上述命令并不是将 111 添加到了新分片中，而是将 111 添加到了集群中，集群内部再随机分配一个 Slave 给新分片。
 
 
 
