@@ -14,6 +14,7 @@
 - [Redis 主从复制](./redis/redis-replication.md)
 - [Redis 哨兵](./redis/redis-sentinel.md)
 - [Redis 集群](./redis/redis-cluster.md)
+- [Redis 缓存](./redis/redis-cache.md)
 
 ## AI
 - [Python 编程从入门到实践](https://wynhelloworld.github.io/Python-Crash-Course/)
