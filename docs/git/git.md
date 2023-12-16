@@ -301,9 +301,141 @@ git merge --no-ff -m "message" <name>
 
 ![image-20231215200545672](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231215200545672.png)
 
-## 远程管理
+## 远程操作
 
+**克隆远程仓库**
 
+```shell
+git clone <远程仓库地址>
+```
+
+**向远程仓库推送**
+
+```shell
+git push <远程主机名> <本地分支名>:<远程分支名>
+```
+
+如果本地分支名与远程分支名相同，则等同于下面命令：
+
+```shell
+git push <远程主机名> <本地分支名>
+```
+
+**从远程仓库拉取**
+
+```shell
+git pull <远程主机名> <远程分支名>:<本地分支名>
+```
+
+如果远程分支名与本地分支名相同，则等同于下面命令：
+
+```shell
+git pull <远程主机名> <远程分支名>
+```
+
+**查看远程主机**
+
+```shell
+git remote -v
+```
+
+**忽略文件**
+
+创建 `.gitignore` 文件。
+
+```shell
+touch .gitignore
+```
+
+将不想上传/不能上传的文件的后缀添加进去，比如 mac 老是自动生成一个 `.DS_Store` 文件，我们不想上传它，那就将这个后缀添加进去：
+
+![image-20231216163537754](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231216163537754.png)
+
+若不想上传 `.so` 文件，则把该后缀也添加进去
+
+![image-20231216163650172](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231216163650172.png)
+
+若此时，想上传某个 `b.so` 文件，有两种做法：
+
+- 强制上传：
+
+  ```shell
+  git add -f b.so
+  ```
+
+- 修改 `.gitignore` 文件
+
+  将 b.so 添加进去，并且前面加上 ！
+
+  ![image-20231216164029978](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231216164029978.png)
+
+## 标签管理
+
+**打默认标签**
+
+```shell
+git tag <tagname>
+```
+
+默认标签是默认打在最新的 commit id 上的。
+
+**打指定标签**
+
+```shell
+git tag <tagname> <commit id>
+```
+
+**打标签时添加说明**
+
+```shell
+git tag -a <tagname> -m "message" [commit id]
+```
+
+**查看标签**
+
+```shell
+git tag
+```
+
+标签的列出顺序不是按照时间来排序的，而是按照字母排序的。
+
+**查看标签详细信息**
+
+```shell
+git show <tagname>
+```
+
+**删除标签**
+
+```shell
+git tag -d <tagname>
+```
+
+**推送单个标签**
+
+```shell
+git push origin <tagname>
+```
+
+**推送全部标签**
+
+```shell
+git push origin --tags
+```
+
+**删除本地标签**
+
+```shell
+git tag -d <tagname>
+```
+
+**删除远程标签**
+
+先删除本地标签，然后再推送
+
+```shell
+git push <远程主机名> :refs/tags/<tagname>
+```
 
 
 
