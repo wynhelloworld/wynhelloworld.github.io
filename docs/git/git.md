@@ -437,6 +437,21 @@ git tag -d <tagname>
 git push <远程主机名> :refs/tags/<tagname>
 ```
 
+## 实战——演示实际开发流程
+
+### 单分支开发
+
+实战流程：
+
+- 创建一个 GitHub 仓库，默认有一个 main 分支，在 main 分支下创建一个 test 文件，再创建一个 dev 分支。
+- 程序员 A 和程序员 B 此时都 clone 下该仓库。
+- 程序员 A 在 dev 分支下往 test 里写入 aaa，然后提交代码。
+- 程序员 B 在 dev 分支下往 test 里写入 bbb，然后提交代码，此时会发现无法提交，然后拉取代码，修改冲突，再次提交代码。
+- dev 先合并 main 分支解决可能存在的冲突，然后 main 分支再合并 dev 分支。
+- 远程仓库删除 dev 分支，本地仓库先执行 `git remote show origin` ，查看到远程 dev 已被删除，然后执行 `git remote prune origin` 删除本地关于远程 dev 分支的记录。最后删除本地 dev 分支，执行 `git branch -d dev`
+
+### 多分支开发
+
 
 
 <script src="https://giscus.app/client.js"
