@@ -439,6 +439,32 @@ git push <远程主机名> :refs/tags/<tagname>
 
 ## 实战——演示实际开发流程
 
+### 一些命令小知识
+
+**为什么有时 git push/pull ，有时 git push/pull <远程主机名> <分支名>:<分支名> **
+
+在本地仓库和远程仓库的分支之间建立连接的情况下，在当前分支下直接使用 git push/pull 就能与远程仓库的对应分支进行沟通。而默认情况下，克隆下来一个远程仓库，默认就有 main 与 origin/main 或者是 master 与 origin/master 的连接，并且默认处于 main/master 分支下，所以就能直接 git push/pull 与 origin/main(master) 进行沟通。
+
+在本地仓库和远程仓库的分支之间没有建立连接的情况下，使用 git push/pull，就不行，因为 git 不知道你想与哪个分支进行沟通。所以此时就要指定本地分支名和远程分支名。
+
+> 如果远程仓库有 3 个分支，此时克隆下来的仓库就默认有 3 个连接。
+
+**如何查看建立了哪些连接？**
+
+```shell
+git branch -vv
+```
+
+**远程仓库没有 feature 分支，本地仓库新建了一个 feature 分支，本地 feature 分支如何连接（并创建）到远程仓库的 feature 分支？**
+
+在 git push 的后面加上参数如下：
+
+```shell
+git push --set-upstream origin <远程分支名> # 这里是 feature
+```
+
+![image-20231218112432284](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218112432284.png)
+
 ### 单分支开发
 
 实战流程：
@@ -449,6 +475,29 @@ git push <远程主机名> :refs/tags/<tagname>
 - 程序员 B 在 dev 分支下往 test 里写入 bbb，然后提交代码，此时会发现无法提交，然后拉取代码，修改冲突，再次提交代码。
 - dev 先合并 main 分支解决可能存在的冲突，然后 main 分支再合并 dev 分支。
 - 远程仓库删除 dev 分支，本地仓库先执行 `git remote show origin` ，查看到远程 dev 已被删除，然后执行 `git remote prune origin` 删除本地关于远程 dev 分支的记录。最后删除本地 dev 分支，执行 `git branch -d dev`
+
+![image-20231218102517107](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218102517107.png)
+
+**程序员 A 提交代码**
+
+![image-20231218102725273](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218102725273.png)
+
+**程序员 B 提交代码**
+
+![image-20231218105759764](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218105759764.png)
+
+**main 分支合并 dev 分支**
+
+有两种方式：
+
+- 在 GitHub 页面上提交 PR。
+- 命令行操作。
+
+这里只演示命令行操作：
+
+不能直接 main 分支直接合并 dev 分支，因为合并大概率会有冲突，而在 main 分支上解决冲突很容易出现问题，所以正确做法是 dev 分支先 合并 main 分支，解决掉可能存在的冲突后，再让 main 分支合并 dev 分支。但由于是在本地的命令行上操作，所以不确定本地仓库的 main 分支是否是最新的，所以 main 分支要先 pull 一下。
+
+![image-20231218110735410](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218110735410.png)
 
 ### 多分支开发
 
