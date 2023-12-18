@@ -499,9 +499,158 @@ git push --set-upstream origin <远程分支名> # 这里是 feature
 
 ![image-20231218110735410](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218110735410.png)
 
+**删除分支**
+
+![image-20231218152936620](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218152936620.png)
+
 ### 多分支开发
 
+实战流程：
 
+- 创建一个 GitHub 仓库，默认有一个 main 分支，在 main 分支下创建一个 test 文件，再创建 dev1 分支和 dev2 分支。
+- 程序员 A 和程序员 B 此时都 clone 下该仓库。
+- 程序员 A 在 dev1 分支下往 test 里写入 aaa，然后提交代码。
+- 程序员 B 在 dev2 分支下往 test 里写入 bbb，然后提交代码。
+- dev1 分支合并 dev2 分支，解决冲突
+- dev 先合并 main 分支解决可能存在的冲突，然后 main 分支再合并 dev 分支。
+- 远程仓库删除 dev 分支，本地仓库先执行 `git remote show origin` ，查看到远程 dev 已被删除，然后执行 `git remote prune origin` 删除本地关于远程 dev 分支的记录。最后删除本地 dev 分支，执行 `git branch -d dev`
+
+![image-20231218153241947](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218153241947.png)
+
+![image-20231218153337257](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218153337257.png)
+
+**程序员 A 的操作**
+
+- 创建并切换到了分支 feature1
+- 创建了 feature1.cc 并且写入了 111
+- 将工作区的改动提交到了版本库中
+- 往远程仓库 push 时发生错误，因为远程仓库并没有分支 feature1
+- 所以改用了 git push –set-upstream origin feature1，创建了远程分支 feature 1 并 push 
+
+![image-20231218153626817](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218153626817.png)
+
+**程序员 B 的操作**
+
+- 创建并切换到了分支 feature2
+- 创建了 feature2.cc 并且写入了 222
+- 讲工作区的改动提交到了版本库中
+- 创建了远程分支 feature2 并 push
+
+![image-20231218161358695](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218161358695.png)
+
+**此时程序员 B 生病了，由程序员 A 帮助程序员 B 进行开发**
+
+- 程序 A pull 了一下远程仓库，获取到了程序员 B 的远程分支
+- 然后创建并切换到了分支 feature2，并且建立了与远程分支 feature2 的连接
+- 往 feature2.cc 中添加了 222，并将代码提交到了远程仓库
+
+![image-20231218161551812](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218161551812.png)
+
+**此时程序 A 帮助程序员 B 完成了一部分功能，然后程序员 B 病情好转，能上班了**
+
+![image-20231218161820804](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218161820804.png)
+
+**分支 feature1 和分支 feature2 的任务都已完成**
+
+feature1 分支下有一个文件 feature1.cc，内容是 111
+
+feature2 分支下有一个文件 feature2.cc，内容是 222 333 done
+
+然后就要将 feature1 的内容和 feature2 的内容合并到 main 分支上
+
+**先合并 feature1 分支**
+
+先切换到 feature1 分支上，合并 main 分支，解决可能存在的冲突，然后再切换到 main 分支上，合并 feature1 分支，最后 push。
+
+但在合并 main 分支的时候，需要先切换到 main 分支上，进行 pull，因为要保证 main 分支是最新的（远程仓库永远是最新的，本地仓库可能不是）。
+
+![image-20231218164654722](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218164654722.png)
+
+**再合并 feature2 分支**
+
+跟 main 分支合并 feature1 分支道理一样。
+
+![image-20231218165040483](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218165040483.png)
+
+**查看 GitHub 仓库，发现目的成功完成**
+
+![image-20231218165151192](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218165151192.png)
+
+**最后，删除远程仓库的 feature1 分支和 feature2 分支，然后删除本地仓库的 feature1 分支和 feature2 分支与本地仓库的远程分支的记录**
+
+![image-20231218165722549](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218165722549.png)
+
+### 经验总结
+
+- 切换到另一个分支上时，先进行一下 pull 操作，确保本地分支与远程分支上的内容一致。
+- 当分支 A merge 分支 B 时，需要保证分支 B 的内容是最新的，正确做法是先切换到分支 B 上，进行 pull 操作，再切换回分支 A，然后 merge 分支 B。
+- 当其它分支的工作内容已完成，需要与 main/master 分支进行合并时，不要直接合并到 main/master 分支上，因为合并分支时往往存在合并冲突，而在 main/master 分支上解决冲突并不是一个明智的选择。正确做法是将 main/master 分支先合并到其它分支上，解决可能存在的冲突，再将其它分支合并到 main/master 分支上。
+
+## 企业开发模型
+
+一个项目从零开始到最后交付，往往需要经过以下几个阶段：规划、编码、构建、测试、发布、部署和维护，当代码体量小时，以上阶段往往一两个人就足矣完成，但是当代码体量很大时，就需要很多的人组成不同的团队来共同为该项目发光发电。
+
+![image-20231218194240939](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218194240939.png)
+
+这些团队所跟进的代码不可能是在同一台服务器上的，因为这样不利于产品的稳定和开发，所以就诞生了很多种系统开发环境。
+
+### 系统开发环境
+
+- **开发环境**：是程序员专门用于日常开发的服务器。
+- **测试环境**：是专门用来测试开发好的代码的服务器，是开发环境向生产环境过度的一个环境。
+- **预发布环境**：该环境是为了避免因测试环境和生产环境差异而导致产品出现意料之外的问题。
+- **生产环境（线上环境）**：是用户能真正访问到的服务器。
+
+### Git 分支设计规范
+
+下面是最常见的一种 GIt 分支设计规范：Git Flow 模型。
+
+ ![image-20231218195403130](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231218195403130.png)
+
+| 分支    | 名称         | 适用环境        |
+| ------- | ------------ | --------------- |
+| master  | 主分支       | 生产环境        |
+| release | 预发布分支   | 预发布/测试环境 |
+| develop | 开发分支     | 开发环境        |
+| feature | 需求开发分支 | 本地            |
+| hotfix  | 紧急修复分支 | 本地            |
+
+#### master 分支
+
+- `master` 是唯一且只读的主分支，用于部署到生产环境，一般由合并 `release` 分支得到。	
+- 主分支作为稳定的唯一代码库，任何情况下都不允许直接在 `master` 分支上修改代码。
+- 产品功能开发完成后，在 `master` 分支上对外发布，所有在 `master` 分支上的推送都应该打标签，方便追溯。
+- `master` 分支不可被删除。 
+
+#### release 分支
+
+- `release` 分支为预发布分支，`master` 分支上的代码全由 `release` 分支合并得来。
+- `release` 分支基于 `develop` 分支创建。
+- 命名方式一般为 `release/` 开头，建议的命名规则是：`release/version_publishtime`。
+- `release` 分支主要用于提交给测试人员进行功能测试。在发布提测阶段，会以 `release` 分支代码为基准进行提测。
+- 若 `release` 分支上的代码出现问题，则需要看一下 `develop` 分支上的代码是否有问题。
+- 当产品上线后，`release` 分支可选删除。
+
+#### develop 分支
+
+- `develop` 是基于 `master` 分支创建的唯一且只读的开发分支，始终保持最新完成以及 bug 修复后的代码。
+- `develop` 分支上的代码一般由 `feature` 分支合并得来。
+
+#### feature 分支
+
+- `feature` 分支通常为新功能或新特性开发分支，是以 `develop` 分支为基础创建的分支。
+- 命名方式一般为 `feature/` 开头，建议的命名规则是：`feature/username_createtime_featurename`。
+- `feature` 上的代码开发完成后，需合并到 `develop` 分支上。
+- 当需求上线之后，`feature` 分支便被删除。
+
+#### hotfix 分支
+
+- `hotfix` 分支为紧急修复分支或补丁分支，主要针对 `master` 分支上的 bug 进行修复。当线上环境出现 bug 后，需要基于 `master` 分支创建出 `hotfix` 分支进行修复。
+- 命名方式一般为 `hotfix/` 开头，建议的命名规则是：`hotxif/username_createtime_hotfixname`。
+- 当 bug 修复后，需合并到 `develop` 分支和 `master` 分支上，并推送到远程。
+- 当修复上线后，`hotfix` 分支便被删除。
+
+ 
 
 <script src="https://giscus.app/client.js"
         data-repo="wynhelloworld/blog-comments"
