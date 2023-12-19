@@ -16,7 +16,7 @@
 
 ## MySQL
 
-
+- [MySQL 基础命令](./mysql/mysql-basic-commands.md)
 
 ## Redis
 
