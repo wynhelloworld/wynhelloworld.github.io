@@ -17,6 +17,7 @@
 ## MySQL
 
 - [MySQL 基础命令](./mysql/mysql-basic-commands.md)
+- [MySQL 数据类型](./mysql/mysql-data-type.md)
 
 ## Redis
 
