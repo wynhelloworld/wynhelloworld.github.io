@@ -97,7 +97,7 @@ DROP DATABASE [IF EXISTS] database_name;
 
 **备份数据库**
 
-```sql
+```
 mysqldump [OPTIONS] -B database_name > path
 
 OPTIONS:
@@ -128,7 +128,7 @@ SOURCE /home/wyn/mydb.sql;
 
 **同时备份多个数据库**
 
-``` sql
+``` 
 mysqldump [OPTIONS] -B database_name [database_name ...] > path
 
 OPTIONS:
@@ -147,7 +147,7 @@ mysqldump -u root -p 123456 -B mydb1 mydb2 > /home/wyn/
 
 **备份数据库中的某张表**
 
-```sql
+```
 mysqldump [OPTIONS] database_name table_name > path
 
 OPTIONS:
