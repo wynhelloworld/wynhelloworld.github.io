@@ -18,6 +18,7 @@
 
 - [MySQL 基础命令](./mysql/mysql-basic-commands.md)
 - [MySQL 数据类型](./mysql/mysql-data-type.md)
+- [MySQL 约束](./mysql/mysql-table-constraint.md)
 
 ## Redis
 
