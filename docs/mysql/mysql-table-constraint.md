@@ -112,9 +112,37 @@
 
 ## 外键
 
+一个数据库往往不只有一张表，而是有很多表。有可能几张表之间存在业务关系，那么要保证这几张表的数据的正确性，就有了外键约束。
 
+通过添加 `FOREIGN KEY(self_key_name) REFERENCES other_table_name(key_name)`来建立外键约束。
 
+> - self_key_name 是从表的列标签名字，other_table_name 是主表的名字，key_name 是主表中要关联的列标签名字；
+> - self_key_name 和 key_name 数据类型要一致； 
+> - key_name 必须是索引。
 
+示例如下：
+
+建立班级表：
+
+![image-20231225165855422](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231225165855422.png)
+
+建立学生表：
+
+![image-20231225170103170](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231225170103170.png)
+
+通过 desc 命令可查看学生表如下：
+
+![image-20231225170256527](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231225170256527.png)
+
+往班级表里插入数据：
+
+![image-20231225170447815](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231225170447815.png)
+
+往学生表里插入数据：
+
+![image-20231225170919012](https://wyn-personal-picture.oss-cn-beijing.aliyuncs.com/img/image-20231225170919012.png)
+
+当往学生表里插入数据的时候并不是想插什么就插什么，而是有着班级表的约束。往学生表里插入数据时，class_id 要么空着，要么就为 班级表里的 id 的值。
 
 
 
