@@ -20,6 +20,7 @@
 - [MySQL 数据类型](./mysql/mysql-data-type.md)
 - [MySQL 约束](./mysql/mysql-table-constraint.md)
 - [MySQL 基本查询](./mysql/mysql-basic-query.md)
+- [MySQL 内置函数](./mysql/mysql-bulit-in-functions.md)
 
 ## Redis
 
