@@ -22,6 +22,7 @@
 - [MySQL 基本查询](./mysql/mysql-basic-query.md)
 - [MySQL 内置函数](./mysql/mysql-bulit-in-functions.md)
 - [MySQL 复合查询](./mysql/mysql-composed-query.md)
+- [MySQL 内外连接](./mysql/mysql-inner-outer-join.md )
 
 ## Redis
 
