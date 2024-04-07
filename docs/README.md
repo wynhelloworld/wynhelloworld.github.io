@@ -23,6 +23,7 @@
 - [MySQL 内置函数](./mysql/mysql-bulit-in-functions.md)
 - [MySQL 复合查询](./mysql/mysql-composed-query.md)
 - [MySQL 内外连接](./mysql/mysql-inner-outer-join.md )
+- [MySQL 索引](./mysql/mysql-index.md)
 
 ## Redis
 
