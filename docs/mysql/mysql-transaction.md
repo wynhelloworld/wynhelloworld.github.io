@@ -16,8 +16,8 @@
 #### 查看支持事务的引擎
 
 ```mysql
-show engines;		-- 表格显示	
-show engines\G	-- 行显示
+show engines;   -- 表格显示	
+show engines\G  -- 行显示
 ```
 
 > MySQL 中仅 InnoDB 支持事务。
@@ -139,10 +139,7 @@ select @@tx_isolation;					-- 查看会话（当前）隔离级别
 **设置隔离级别**
 
 ```mysql
-set {session | global} transaction isolation level {READ UNCOMMITTED |
-																										READ COMMITTED   |
-																										REPEATABLE READ	 |
-																										SERIALIZABLE}
+set {session | global} transaction isolation level {READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ	| SERIALIZABLE}
 ```
 
 **读未提交——效果演示**
