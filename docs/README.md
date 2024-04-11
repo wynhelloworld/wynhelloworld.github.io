@@ -24,6 +24,7 @@
 - [MySQL 复合查询](./mysql/mysql-composed-query.md)
 - [MySQL 内外连接](./mysql/mysql-inner-outer-join.md )
 - [MySQL 索引](./mysql/mysql-index.md)
+- [MySQL 事务](./mysql/mysql-transaction.md)
 
 ## Redis
 
