@@ -9,7 +9,7 @@
 - 原子性（**A**tomicity）
 - 一致性（**C**onsistency）
 - 隔离性（**I**solation）
-- 持久性（**I**solation）
+- 持久性（**D**urability）
 
 ## 对事务的操纵
 
@@ -131,9 +131,9 @@ MySQL 服务端是会被大量客户端同时以事务的形式访问的，每�
 **查看隔离级别**
 
 ```mysql
-select @@global.tx_isolation;		-- 查看全局隔离级别
-select @@session.tx_isolation;	-- 查看会话（当前）隔离级别
-select @@tx_isolation;					-- 查看会话（当前）隔离级别
+select @@global.tx_isolation;   -- 查看全局隔离级别
+select @@session.tx_isolation;  -- 查看会话（当前）隔离级别
+select @@tx_isolation;          -- 查看会话（当前）隔离级别
 ```
 
 **设置隔离级别**
