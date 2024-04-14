@@ -105,8 +105,8 @@ AOF 文件的重写分为手动触发和自动触发:
   auto-aof-rewrite-min-size 64mb
   ```
   
-  - `auto-aof-rewrite-percentage`： 表示触发重写时 AOF 的最小文件大小为 64MB。
-  - `auto-aof-rewrite-min-size`：表示当前 AOF 占用大小相比较上次重写增加的比例。
+  - `auto-aof-rewrite-percentage`： 表示当前 AOF 占用大小相比较上次重写增加的比例。
+  - `auto-aof-rewrite-min-size`：表示触发重写时 AOF 的最小文件大小为 64MB。
 
 #### AOF 的重写流程
 
