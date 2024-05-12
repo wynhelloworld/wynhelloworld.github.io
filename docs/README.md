@@ -10,6 +10,8 @@
 
 - [ROS2 安装与测试](./ros2/ros2-installation-testing.md)
 - [ROS2 工作空间](./ros2/ros2-workspace.md)
+- [ROS2 功能包](./ros2/ros2-package.md)
+- [ROS2 节点](./ros2/ros2-node.md)
 
 
 ## Git
